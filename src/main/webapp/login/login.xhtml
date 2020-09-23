@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:composition template="/WEB-INF/templates/_loginTemplate.xhtml">
+        <ui:define name="title">Contate</ui:define>
+        <ui:define name="extraCss">
+            <h:outputStylesheet name="/css/login.css" />
+        </ui:define>
+        <ui:define name="extraJS">
+        </ui:define>
+        <ui:define name="contentLogin">
+            <h:form prependId="false">
+                <p:growl id="messages" >
+                    <p:autoUpdate />
+                </p:growl>
+                <p:panelGrid id="pnl" columns="1" layout="grid"
+                             styleClass="ui-fluid center panelGridCenterLogin">
+                    <p:panelGrid columns="1" layout="grid"
+                                 styleClass="ui-noborder ui-fluid center image">
+                        <h:graphicImage styleClass="teste" name="/imagens/brasao_de_fortaleza.svg.png"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" layout="grid"
+                                 styleClass="ui-noborder ui-fluid center centeredText centeredText">
+                        <p:staticMessage severity="error" summary="ERROR!"
+                                         detail="#{msg['login.errormsg']}"
+                                         rendered="${!empty param['error']}" />
+                        <p:outputLabel styleClass="bolderText"
+                                       value="#{msg['login.sistitulo']}"></p:outputLabel>
+                    </p:panelGrid>
+
+                    <p:inputMask id="username" placeholder="Cpf"
+                                 autocomplete="off"/>
+
+                    <p:password id="password" placeholder="Senha"
+                                autocomplete="off" />
+
+                    <p:panelGrid columns="1" styleClass="ui-noborder ui-fluid center"
+                                 layout="grid">
+                        <p:commandButton styleClass="bt" value="Login" ajax="false" />
+                    </p:panelGrid>
+                </p:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
