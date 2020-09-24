@@ -6,21 +6,26 @@
 package fortaleza.ce.gov.br.acesso.models;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.br.CPF;
 
 /**
  *
  * @author everton
  */
-public class Visitantes implements Serializable{
+public class Visitante implements Serializable {
 
-   
-   private String cpf;
-   private String nome;
-   private String endereco;
+    private static final long serialVersionUID = 1L;
+    @CPF
+    @NotBlank(message = "{field.cpf.validation.contraints.NotBlank.message}")
+    private String cpf;
+    @NotBlank(message = "{field.nome.validation.contraints.NotBlank.message}")
+    private String nome;
+    private String endereco;
 
-    public Visitantes() {
+    public Visitante() {
     }
-    
+
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
@@ -44,6 +49,5 @@ public class Visitantes implements Serializable{
     public String getEndereco() {
         return endereco;
     }
-   
-    
+
 }
