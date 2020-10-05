@@ -10,19 +10,22 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  *
  * @author everton
  */
 @Configuration
+@EnableTransactionManagement
 @ComponentScan("fortaleza.ce.gov.br.acesso.config")
 public class SpringJdbcConfig {
-
-    @Bean
+    
+    @Primary
+    @Bean(name = "acessodb")
     public DataSource postgresqlDataSource() {
         DataSourceBuilder<?> dataSource = DataSourceBuilder.create();
-        /* configuração do banco de homologação */
         dataSource.driverClassName("org.postgresql.Driver");
         dataSource.url("jdbc:postgresql://localhost/acessodb");
         dataSource.username("acesso_user");

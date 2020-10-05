@@ -17,6 +17,7 @@ import fortaleza.ce.gov.br.acesso.annotations.EqualFields;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -24,6 +25,8 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,7 +39,7 @@ import org.springframework.stereotype.Component;
     @EqualFields(baseValue = "senha", matchValue = "confSenha", message = "{field.senha.validation.contraints.EqualFields.message}")})
 @JsonIgnoreProperties({"username", "password", "enabled", "accountNonExpired", "authorities", "accountNonLocked",
     "credentialsNonExpired"})
-public class Usuario implements Serializable {
+public class Usuario implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 1L;
     @NotBlank(message = "{field.nome.validation.contraints.NotBlank.message}")
@@ -258,6 +261,41 @@ public class Usuario implements Serializable {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.cpf;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 }

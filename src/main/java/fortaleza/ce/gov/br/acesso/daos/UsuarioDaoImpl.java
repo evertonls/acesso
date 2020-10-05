@@ -10,22 +10,19 @@ import fortaleza.ce.gov.br.acesso.models.Usuario;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -36,43 +33,23 @@ import org.springframework.stereotype.Repository;
 public class UsuarioDaoImpl implements UsuarioDao, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private JdbcTemplate template;
-    private final Logger logger;
-    private ConversionService cs;
-    private final static String QUERY = "SELECT usuario_nm, usuario_ap, u.cpf_num, birth_data, email, senha, recupera_cod, ativo, autoriza_cod"
+    private final JdbcTemplate template;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final ConversionService cs;
+    private static final String QUERY = "SELECT usuario_nm, usuario_ap, u.cpf_num, birth_data, email, senha, recupera_cod, ativo, autoriza_cod"
             + "FROM usuarios u" + "LEFT JOIN permissoes p ON u.cpf_num = p.cpf_num";
 
-    public UsuarioDaoImpl(DataSource ds, final Logger logger, ConversionService cs) {
+    public UsuarioDaoImpl(DataSource ds, ConversionService cs) {
         this.template = new JdbcTemplate(ds);
-        this.logger = logger;
         this.cs = cs;
     }
 
     @Override
-    public String persistUser(Usuario usuario) {
+    public void persistUser(Usuario usuario) {
         final String sql = "INSERT INTO usuarios (usuario_nm, usuario_ap, cpf_num, birth_data, email, senha, recupera_cod, ativo)"
                 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        PreparedStatementCreatorFactory pscFactory = new PreparedStatementCreatorFactory(sql, Types.VARCHAR,
-                Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR,
-                Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN);
-        pscFactory.setReturnGeneratedKeys(true);
-        PreparedStatementCreator psc = pscFactory.newPreparedStatementCreator(
-                Arrays.asList(usuario.getNome(), usuario.getApelido(), usuario.getCpf(),
-                        usuario.getDataNascimento(),
-                        usuario.getEmail(), usuario.getSenha(), usuario.isAtivo()));
-
-        template.update(psc, keyHolder);
-
-        Long novoId;
-        if (keyHolder.getKeys().size() > 1) {
-            novoId = (Long) keyHolder.getKeys().get("usuario_id");
-        } else {
-            novoId = keyHolder.getKey().longValue();
-        }
-
-        return novoId;
-
+        template.update(sql, usuario.getNome(), usuario.getApelido(), usuario.getCpf(), usuario.getDataNascimento(),
+                usuario.getEmail(), usuario.getSenha(), usuario.getCodRecuperacao(), usuario.isAtivo());
     }
 
     @Override
@@ -81,33 +58,38 @@ public class UsuarioDaoImpl implements UsuarioDao, Serializable {
 
         List<Usuario> usuarios = template.query(sql, this::extractUsers, cpf);
         logger.info("Buscando usuário: " + cpf);
-        return usuarios.get(0);
-
+        
+        return Optional.ofNullable(usuarios)
+                .filter(u -> Optional.ofNullable(u.get(0)).isPresent())
+                .map(u -> u.get(0)).get();
+        
+       
     }
 
     @Override
     public void gravaCodRecuperacao(String codigo, String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        final String sql = "UPDATE usuarios SET recupera_cod = ? WHERE email = ?";
+        template.update(sql, codigo, email);
     }
 
     @Override
     public String getCodRecuperacao(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return template.queryForObject("SELECT recupera_cod FROM usuarios WHERE cpf_num = ?", String.class, cpf);
     }
 
     @Override
     public void updatePassword(String senha, String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        template.update("UPDATE Usuarios SET senha = ? WHERE cpf_num = ?", BCrypt.hashpw(senha, BCrypt.gensalt()), cpf);
     }
 
     @Override
     public void updateCodRecuperacaoToNull(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        template.update("UPDATE usuarios SET recupera_cod = ? WHERE cpf_num = ?", null, cpf);
     }
 
     private List<Usuario> extractUsers(ResultSet rs) throws SQLException, DataAccessException {
         Map<String, Usuario> userMap = new HashMap<>();
-        Usuario usuarioAtual = null;
+        Usuario usuarioAtual;
 
         while (rs.next()) {
 
@@ -122,7 +104,7 @@ public class UsuarioDaoImpl implements UsuarioDao, Serializable {
                 usuarioAtual.setDataNascimento(cs.convert(rs.getDate("birth_data"), LocalDate.class));
                 usuarioAtual.setSenha(rs.getString("senha"));
                 usuarioAtual.setEmail(rs.getString("email"));
-                usuarioAtual.setAuthorities(new ArrayList<Autorizacao>());
+                usuarioAtual.setAuthorities(new ArrayList<>());
 
                 userMap.put(id, usuarioAtual);
             }

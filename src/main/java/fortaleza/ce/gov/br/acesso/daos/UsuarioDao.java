@@ -13,7 +13,7 @@ import fortaleza.ce.gov.br.acesso.models.Usuario;
  */
 public interface UsuarioDao {
     
-    public String persistUser(Usuario usuario);
+    public void persistUser(Usuario usuario);
     public Usuario getByCpf(String cpf);
     public void gravaCodRecuperacao(String codigo, String email);
     public String getCodRecuperacao(String cpf);
