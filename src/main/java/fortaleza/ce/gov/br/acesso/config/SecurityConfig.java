@@ -22,6 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService users;
 
+    public SecurityConfig(UserDetailsService users) {
+        this.users = users;
+    }
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -52,8 +56,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(users).passwordEncoder(new BCryptPasswordEncoder());
+//        auth.inMemoryAuthentication()
+//	          .withUser("teste").password(passwordEncoder().encode("1234")).roles("USER")
+//	          .and()
+//	          .withUser("teste2").password(passwordEncoder().encode("5678")).roles("USER")
+//	          .and()
+//	          .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+       auth.userDetailsService(users).passwordEncoder(new BCryptPasswordEncoder());
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

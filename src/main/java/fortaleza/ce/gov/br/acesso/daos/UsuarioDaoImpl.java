@@ -54,7 +54,7 @@ public class UsuarioDaoImpl implements UsuarioDao, Serializable {
 
     @Override
     public Usuario getByCpf(String cpf) {
-        final String sql = QUERY + "WHERE cpf_num = ?";
+        final String sql = QUERY + "WHERE u.cpf_num = ?";
 
         List<Usuario> usuarios = template.query(sql, this::extractUsers, cpf);
         logger.info("Buscando usuário: " + cpf);

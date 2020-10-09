@@ -13,29 +13,21 @@
         <ui:define name="extraCss">
             <h:outputStylesheet name="/css/login.css" />
         </ui:define>
-        <ui:define name="extraJS">
-        </ui:define>
         <ui:define name="contentLogin">
             <h:form prependId="false">
                 <p:growl id="messages" >
                     <p:autoUpdate />
                 </p:growl>
+                <input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
                 <p:panelGrid id="pnl" columns="1" layout="grid"
                              styleClass="ui-fluid center panelGridCenterLogin">
                     <p:panelGrid columns="1" layout="grid"
                                  styleClass="ui-noborder ui-fluid center image">
                         <h:graphicImage styleClass="teste" name="/imagens/brasao_de_fortaleza.svg.png"/>
                     </p:panelGrid>
-                    <p:panelGrid columns="1" layout="grid"
-                                 styleClass="ui-noborder ui-fluid center centeredText centeredText">
-                        <p:staticMessage severity="error" summary="ERROR!"
-                                         detail="#{msg['login.errormsg']}"
-                                         rendered="${!empty param['error']}" />
-                        <p:outputLabel styleClass="bolderText"
-                                       value="#{msg['login.sistitulo']}"></p:outputLabel>
-                    </p:panelGrid>
-
-                    <p:inputMask id="username" placeholder="Cpf"
+                 
+              <p:inputMask id="username" placeholder="Cpf"
                                  autocomplete="off"/>
 
                     <p:password id="password" placeholder="Senha"

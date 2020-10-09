@@ -87,6 +87,18 @@ public class Usuario implements UserDetails, Serializable {
 //        uso do frameworl
     }
 
+    public Usuario(String nome, String apelido, String cpf, String email, LocalDate dataNascimento, String senha) {
+        this.nome = nome;
+        this.apelido = apelido;
+        this.cpf = cpf;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.senha = senha;
+    }
+
+ 
+    
+
     /**
      *
      * @return
