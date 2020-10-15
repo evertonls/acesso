@@ -22,6 +22,7 @@ public class Autorizacao implements GrantedAuthority, Serializable, Comparable<A
     private String authority;
     private String descricao;
 
+    
     public Autorizacao(String authority) {
         super();
         this.authority = authority;
