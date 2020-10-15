@@ -28,7 +28,6 @@ public class VisitanteDaoImpl implements VisitanteDao, Serializable {
 
     @Override
     public void persist(Visitante visit) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
