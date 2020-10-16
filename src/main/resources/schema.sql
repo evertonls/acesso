@@ -19,19 +19,8 @@ CREATE TABLE IF NOT EXISTS visitantes(
 	visit_cpf varchar(11) NOT NULL,
 	visit_nome varchar (50) NOT NULL,
 	visit_fone varchar(255),
-	setorcod varchar(20),
 	CONSTRAINT visitante_cpf UNIQUE (visit_cpf),
-	CONSTRAINT fk_setorcod FOREIGN KEY (setorcod) REFERENCES setordestino(setorcod),
 	CONSTRAINT visitante_cpf_pk PRIMARY KEY (visit_cpf)
-);
-
-CREATE TABLE IF NOT EXISTS hist_acesso(
-	visit_cpf varchar(11) NOT NULL,
-	placa varchar(10),
-	dataent timestamp(8),
-	datasai timestamp(8),
-	CONSTRAINT fk_visit_cpf FOREIGN KEY (visit_cpf) REFERENCES visitantes(visit_cpf)
-		
 );
 
 CREATE TABLE IF NOT EXISTS usuarios(
@@ -49,7 +38,20 @@ CREATE TABLE IF NOT EXISTS usuarios(
 );
 COMMENT ON TABLE usuarios IS 'usuarios do sistema';
 
-
+CREATE TABLE IF NOT EXISTS visita(
+	visit_cpf varchar(11) NOT NULL,
+        cpf_num varchar(11),
+	placa varchar(10),
+	dataent timestamp(8),
+	datasai timestamp(8),
+        setor_cod varchar(11),
+        agendada boolean,
+	CONSTRAINT fk_visit_cpf FOREIGN KEY (visit_cpf) REFERENCES visitantes(visit_cpf),
+        CONSTRAINT fk_cpf_num FOREIGN KEY (cpf_num) REFERENCES usuarios(cpf_num),
+        CONSTRAINT fk_setor_cod FOREIGN KEY (setor_cod) REFERENCES setordestino(setorcod)
+		
+);
+COMMENT ON TABLE visita IS 'Visitas do sistema';
 
 CREATE TABLE IF NOT EXISTS autorizacoes(
 	autoriza_cod varchar(100) NOT NULL,
