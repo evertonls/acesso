@@ -21,33 +21,39 @@ public class Visitante implements Serializable {
     private String cpf;
     @NotBlank(message = "{field.nome.validation.contraints.NotBlank.message}")
     private String nome;
-    private String endereco;
+    private String fone;
 
     public Visitante() {
+        //uso do framework
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public Visitante(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getCpf() {
         return cpf;
     }
 
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public String getNome() {
         return nome;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
+    public String getFone() {
+        return fone;
+    }
+
+    public void setFone(String fone) {
+        this.fone = fone;
+    }
+
+    
 }

@@ -99,6 +99,10 @@ public class Usuario implements UserDetails, Serializable, Comparable<Usuario> {
         this.senha = senha;
     }
 
+    public Usuario(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      *
      * @return

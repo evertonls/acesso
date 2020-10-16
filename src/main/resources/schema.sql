@@ -1,18 +1,7 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- * Author:  everton
- * Created: 16 de out de 2020
- */
-
-CREATE TABLE IF NOT EXISTS setordestino(
-	setorcod varchar(20),
-	setordest varchar(255),
-	autorizador varchar(255),
-	CONSTRAINT pk_setordestino PRIMARY KEY (setorcod)
+CREATE TABLE IF NOT EXISTS setor(
+	setor_cod varchar(20),
+	setor_desc varchar(255),
+	CONSTRAINT pk_setor PRIMARY KEY (setor_cod)
 );
 
 CREATE TABLE IF NOT EXISTS visitantes(
@@ -45,10 +34,11 @@ CREATE TABLE IF NOT EXISTS visita(
     dataent timestamp(8),
     datasai timestamp(8),
     setor_cod varchar(11),
+    autorizado_por varchar(255),
     agendada boolean,
     CONSTRAINT fk_visit_cpf FOREIGN KEY (visit_cpf) REFERENCES visitantes(visit_cpf),
     CONSTRAINT fk_cpf_num FOREIGN KEY (cpf_num) REFERENCES usuarios(cpf_num),
-    CONSTRAINT fk_setor_cod FOREIGN KEY (setor_cod) REFERENCES setordestino(setorcod)
+    CONSTRAINT fk_setor_cod FOREIGN KEY (setor_cod) REFERENCES setor(setor_cod)
 		
 );
 

@@ -93,8 +93,8 @@ public class UsuarioDaoImpl implements UsuarioDao, Serializable {
 
         while (rs.next()) {
 
-            String id = rs.getString("cpf_num");
-            usuarioAtual = userMap.get(id);
+            String cpf = rs.getString("cpf_num");
+            usuarioAtual = userMap.get(cpf);
 
             if (usuarioAtual == null) {
                 usuarioAtual = new Usuario();
@@ -106,7 +106,7 @@ public class UsuarioDaoImpl implements UsuarioDao, Serializable {
                 usuarioAtual.setEmail(rs.getString("email"));
                 usuarioAtual.setAuthorities(new ArrayList<>());
 
-                userMap.put(id, usuarioAtual);
+                userMap.put(cpf, usuarioAtual);
             }
 
             String roleName = rs.getString("autoriza_cod");

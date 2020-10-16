@@ -17,27 +17,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class VisitanteDaoImpl implements VisitanteDao, Serializable {
     private static final long serialVersionUID = 1L;
-    private JdbcTemplate template;
-    private Logger logger;
+    private final JdbcTemplate template;
+    private final Logger log;
 
    
-    public VisitanteDaoImpl(DataSource ds, Logger logger) {
+    public VisitanteDaoImpl(DataSource ds, Logger log) {
         this.template = new JdbcTemplate(ds);
-        this.logger = logger;
+        this.log = log;
     }
 
     @Override
     public void persist(Visitante visit) {
+        log.info("Gravando Visitante!");
+        final String sql = "INSERT INTO visitantes(visit_cpf, visit_nome, visit_fone) "
+                + "VALUES(?, ?, ?)";
+        template.update(sql, visit.getCpf(), visit.getNome(), visit.getFone());
     }
 
-    @Override
-    public Visitante getVisitanteByCPF(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Visitante getVisitanteByPlaca(String placa) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

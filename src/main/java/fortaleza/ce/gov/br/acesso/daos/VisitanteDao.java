@@ -13,8 +13,8 @@ import fortaleza.ce.gov.br.acesso.models.Visitante;
  */
 public interface VisitanteDao {
     public void persist (Visitante visit);
-    public Visitante getVisitanteByCPF(String cpf);
-    public Visitante getVisitanteByPlaca(String placa);
+    //public Visitante getVisitanteByCPF(String cpf);
+    //public Visitante getVisitanteByPlaca(String placa);
             
     
 }
