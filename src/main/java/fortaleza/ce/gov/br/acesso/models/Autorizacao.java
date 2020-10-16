@@ -16,12 +16,14 @@ import org.springframework.security.core.GrantedAuthority;
  *
  * @author everton
  */
+//teste para subir pro github e bitbucket
 public class Autorizacao implements GrantedAuthority, Serializable, Comparable<Autorizacao> {
 
     private static final long serialVersionUID = 1L;
     private String authority;
     private String descricao;
 
+    
     public Autorizacao(String authority) {
         super();
         this.authority = authority;

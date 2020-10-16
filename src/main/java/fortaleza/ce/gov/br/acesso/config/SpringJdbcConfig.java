@@ -27,7 +27,7 @@ public class SpringJdbcConfig {
     public DataSource postgresqlDataSource() {
         DataSourceBuilder<?> dataSource = DataSourceBuilder.create();
         dataSource.driverClassName("org.postgresql.Driver");
-        dataSource.url("jdbc:postgresql://localhost/acessodb");
+        dataSource.url("jdbc:postgresql://localhost:5432/acessodb");
         dataSource.username("acesso_user");
         dataSource.password("123456789");
 
