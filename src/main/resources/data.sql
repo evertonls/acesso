@@ -5,7 +5,7 @@
  */
 /**
  * Author:  everton
- * Created: 30 de set de 2020
+ * Created: 16 de out de 2020
  */
 
 INSERT INTO usuarios (usuario_nm, usuario_ap, cpf_num, email, senha) VALUES

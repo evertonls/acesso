@@ -5,7 +5,7 @@
  */
 /**
  * Author:  everton
- * Created: 30 de set de 2020
+ * Created: 16 de out de 2020
  */
 
 CREATE TABLE IF NOT EXISTS setordestino(
@@ -39,19 +39,18 @@ CREATE TABLE IF NOT EXISTS usuarios(
 COMMENT ON TABLE usuarios IS 'usuarios do sistema';
 
 CREATE TABLE IF NOT EXISTS visita(
-	visit_cpf varchar(11) NOT NULL,
-        cpf_num varchar(11),
-	placa varchar(10),
-	dataent timestamp(8),
-	datasai timestamp(8),
-        setor_cod varchar(11),
-        agendada boolean,
-	CONSTRAINT fk_visit_cpf FOREIGN KEY (visit_cpf) REFERENCES visitantes(visit_cpf),
-        CONSTRAINT fk_cpf_num FOREIGN KEY (cpf_num) REFERENCES usuarios(cpf_num),
-        CONSTRAINT fk_setor_cod FOREIGN KEY (setor_cod) REFERENCES setordestino(setorcod)
+    visit_cpf varchar(11) NOT NULL,
+    cpf_num varchar(11),
+    placa varchar(10),
+    dataent timestamp(8),
+    datasai timestamp(8),
+    setor_cod varchar(11),
+    agendada boolean,
+    CONSTRAINT fk_visit_cpf FOREIGN KEY (visit_cpf) REFERENCES visitantes(visit_cpf),
+    CONSTRAINT fk_cpf_num FOREIGN KEY (cpf_num) REFERENCES usuarios(cpf_num),
+    CONSTRAINT fk_setor_cod FOREIGN KEY (setor_cod) REFERENCES setordestino(setorcod)
 		
 );
-COMMENT ON TABLE visita IS 'Visitas do sistema';
 
 CREATE TABLE IF NOT EXISTS autorizacoes(
 	autoriza_cod varchar(100) NOT NULL,
