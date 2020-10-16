@@ -4,7 +4,6 @@ package fortaleza.ce.gov.br.acesso.config;
  *
  * @author everton
  */
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,13 +18,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService users;
+    private final UserDetailsService users;
 
     public SecurityConfig(UserDetailsService users) {
         this.users = users;
     }
-    
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -44,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and().formLogin().loginPage("/login/login.xhtml")
+                .usernameParameter("usuario")
+                .passwordParameter("senha")
                 .defaultSuccessUrl("/usuarios/home.xhtml", true)
                 .failureUrl("/login/login.xhtml?error=true")
                 .and().logout()
@@ -62,9 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	          .withUser("teste2").password(passwordEncoder().encode("5678")).roles("USER")
 //	          .and()
 //	          .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
-       auth.userDetailsService(users).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(users).passwordEncoder(new BCryptPasswordEncoder());
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

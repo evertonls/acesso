@@ -15,10 +15,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import fortaleza.ce.gov.br.acesso.annotations.EqualFields;
 import java.io.Serializable;
+import java.text.Collator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -39,7 +42,7 @@ import org.springframework.stereotype.Component;
     @EqualFields(baseValue = "senha", matchValue = "confSenha", message = "{field.senha.validation.contraints.EqualFields.message}")})
 @JsonIgnoreProperties({"username", "password", "enabled", "accountNonExpired", "authorities", "accountNonLocked",
     "credentialsNonExpired"})
-public class Usuario implements UserDetails, Serializable {
+public class Usuario implements UserDetails, Serializable, Comparable<Usuario> {
 
     private static final long serialVersionUID = 1L;
     @NotBlank(message = "{field.nome.validation.contraints.NotBlank.message}")
@@ -95,9 +98,6 @@ public class Usuario implements UserDetails, Serializable {
         this.dataNascimento = dataNascimento;
         this.senha = senha;
     }
-
- 
-    
 
     /**
      *
@@ -308,6 +308,41 @@ public class Usuario implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Usuario)) {
+            return false;
+        }
+
+        Usuario usuario = (Usuario) obj;
+
+        return usuario.cpf.equals(cpf);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf);
+    }
+
+    // comparação por ordem natural. nome completo.
+    @Override
+    public int compareTo(Usuario o) {
+        Collator brCollator = Collator.getInstance(Locale.getDefault());
+        brCollator.setStrength(Collator.PRIMARY);
+        return brCollator.compare(nome, o.getNome());
+    }
+
+    public int compareApelido(Usuario o) {
+        Collator brCollator = Collator.getInstance(Locale.getDefault());
+        brCollator.setStrength(Collator.PRIMARY);
+        return brCollator.compare(apelido, o.getApelido());
     }
 
 }

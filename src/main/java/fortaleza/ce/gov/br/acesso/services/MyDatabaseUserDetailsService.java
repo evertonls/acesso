@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
  *
  * @author everton
  */
+
 @Service("MyDatabaseUserDetailsService")
 public class MyDatabaseUserDetailsService implements UserDetailsService {
 
